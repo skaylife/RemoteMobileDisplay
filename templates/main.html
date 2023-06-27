@@ -1,0 +1,92 @@
+{% extends "base.html"%}
+
+{% block content %}
+    <!-- <a href="http://www.yotube.com" target="_blank">Кнопка ютуб</a>
+        
+            
+    <form action="/process_data/1/" method="POST">
+        <input type="submit" class="btn btn-dark" value="Нажать 1">
+    </form> -->
+    <h1>Main Page</h1>
+    <!-- аргумент как часть пути -->
+    <form action="/process_data/2/" method="POST">
+        <input type="submit" class="btn btn-dark" value="Узнать Сведенья о компьютере">
+    </form>
+
+    <!-- {% for item in items %}
+    <p>{{ item }}</p>
+    {% endfor %} -->
+    
+    <!-- {% if items %}
+    <p>{{items.values()}}</p>
+    {% endif %} -->
+
+    {% if items %}
+    <div class="statistics">
+        <h2>Сведенья о компьютере:</h2>
+        <div class="statistics__block">
+            <h5>Сетевые данные</h5>
+            <p>Локальный  IP в сети: {{ items['ip_all']['ip_local'] }}</p>
+            <p>Глобальный IP скрыт: 110.111.4.10</p>
+            <!-- <p>Глобальный IP скрыт: 110.111.4.10 {{ items['ip_all']['ip_global'] }}</p> -->
+        </div>
+        <div class="statistics__block">
+            <h5>Время</h5>
+            <p>Текущее время: {{ items['workTimePc']['system_time'] }}</p>
+            <p>Текущее время JS: <span id="currentDateTime"></span></p>
+            <p>Время в работе: {{ items['workTimePc']['time_work_pc'] }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+
+	<script>
+		function updateDateTime() {
+			// Получаем текущую дату и время
+			var currentDateTime = new Date();
+
+			// Форматируем время в строку
+			var hours = currentDateTime.getHours();
+			var minutes = currentDateTime.getMinutes();
+			var seconds = currentDateTime.getSeconds();
+			if (minutes < 10) {
+				minutes = "0" + minutes;
+			}
+			if (seconds < 10) {
+				seconds = "0" + seconds;
+			}
+			var timeString = hours + ":" + minutes + ":" + seconds;
+
+			// Форматируем дату в строку
+			var months = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+			var month = months[currentDateTime.getMonth()];
+			var dateString = currentDateTime.getDate() + " " + month + " " + currentDateTime.getFullYear();
+
+			// Объединяем дату и время в полную строку
+			var dateTimeString = dateString + " " + timeString;
+
+			// Выводим дату и время на страницу
+			document.getElementById("currentDateTime").innerHTML = dateTimeString;
+		}
+
+		// Обновляем дату и время каждую секунду
+		setInterval(updateDateTime, 1000);
+	</script>
+
+
+
+        <!-- {% if items %}
+    <p>{{items.values()}}</p>
+    {% endif %} -->
+
+    <!-- <h2>Ваш IPCONFIG</h2>
+    {% if data %}
+    <h4>Данные:</h4>
+    <h4>{{ data[75] }}!</h4>
+    <h4>{{ data[76] }}!</h4>
+    <h4>{{ data[80] }}!</h4>
+    <h4>{{ data[70] }}!</h4>
+    {% else %}
+    <h1>Hello, World!</h1>
+    {% endif %} -->
+{% endblock %}
