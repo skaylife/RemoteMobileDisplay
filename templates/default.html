@@ -21,23 +21,23 @@
 
 
     <h1>Settings</h1>
-    <form method="POST">
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name"><br><br>
-        <label for="url">URL:</label>
-        <input type="text" name="url" id="url"><br><br>
-        <button type="submit">Add</button>
+        <form method="POST">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name"><br><br>
+            <label for="url">URL:</label>
+            <input type="text" name="url" id="url"><br><br>
+            <button type="submit">Add</button>
         </form>
         <ul>
         {% for item in items %}
         <li>
         <form method="POST" action="/edit/{{ loop.index0 }}">
-        <input type="text" name="name" value="{{ item['name'] }}">
-        <input type="text" name="url" value="{{ item['url'] }}">
-        <button type="submit">Save</button>
+            <input type="text" name="name" value="{{ item['name'] }}">
+            <input type="text" name="url" value="{{ item['url'] }}">
+            <button type="submit">Save</button>
         </form>
         <form method="POST" action="/delete/{{ loop.index0 }}">
-        <button type="submit">Delete</button>
+            <button type="submit">Delete</button>
         </form>
         {% if loop.index > 1 %}
         <form method="POST" action="/move_up/{{ loop.index0 }}">

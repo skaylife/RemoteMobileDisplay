@@ -1,5 +1,5 @@
 import json
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template, redirect, request
 from config import configStart
 from commands import *
 
@@ -29,9 +29,10 @@ def start():
         # Сохраняем список в файле JSON
         save_items(items)
 
+        # Перезагружаем страницу
+        return redirect("/")
         # Возвращаем JSON-ответ с добавленным элементом
         return jsonify(items[-1])
-    
     else:
         # Отображаем страницу с формой добавления элемента и списком всех элементов
         return render_template('default.html', items=items, data=data)

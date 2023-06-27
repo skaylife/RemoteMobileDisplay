@@ -1,7 +1,12 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, redirect, request, jsonify
 import json
+from .crud_json import *
+filename = 'data.json'
+
+
 
 def edit_item(index):
+    items = get_items()
     # Получаем данные из формы и изменяем соответствующий элемент списка
     name = request.form['name']
     url = request.form['url']
@@ -9,8 +14,9 @@ def edit_item(index):
     items[index]['url'] = url
 
     # Сохраняем список в файле JSON
-    with open(filename, 'w') as f:
-        f.write(json.dumps(items))
+    write_items(items)
 
+   # Обновляет страницу с перебросом на основную 
+    return redirect('/')
     # Возвращаем JSON-ответ с измененным элементом
     return jsonify(items[index])
