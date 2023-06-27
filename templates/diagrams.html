@@ -1,0 +1,117 @@
+{% extends "base.html"%}
+{% block content %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <h1>Информация о системе</h1>
+    <div id="cpu" style="display:inline-block;width:33%;"></div>
+    <div id="cpu2" style="display:inline-block;width:33%;"></div>
+    <div id="mem" style="display:inline-block;width:33%;"></div>
+    <div id="disks" style="display:inline-block;width:33%;"></div>
+
+    <script>
+        var cpu_percent = {{ cpu_percent }};
+        var cpu_data = [{
+            values: [cpu_percent, 100 - cpu_percent],
+            labels: ['Использовано', 'Свободно'],
+            type: 'pie'
+        }];
+        Plotly.newPlot('cpu', cpu_data);
+
+        var mem_used = {{ mem_used }};
+        var mem_total = {{ mem_total }};
+        var mem_data = [{
+            values: [mem_used, mem_total - mem_used],
+            labels: ['Использовано', 'Свободно'],
+            type: 'pie'
+        }];
+        Plotly.newPlot('mem', mem_data);
+
+        var disk_free = {{ disk_free }};
+        var disk_total = {{ disk_total }};
+        var disk_data = [{
+            values: [disk_free, disk_total - disk_free],
+            labels: ['Свободно', 'Занято'],
+            type: 'pie'
+        }];
+        Plotly.newPlot('disks', disk_data);
+    </script>
+
+<script>
+    function updateSystemInfo() {
+        fetch('/system_info')
+            .then(resp => resp.json())
+            .then(data => {
+                // console.log(data)
+                // console.log(data['cpu_count'])
+                // console.log(data['cpu_percent'])
+                // console.log(data['disk_count'])
+                // console.log(data['disk_free'])
+                // console.log(data['mem_percent'])
+                // console.log(data['mem_total'].toFixed(2))
+                // console.log(data['mem_used'].toFixed(2))
+                document.querySelector('#cpu_count').innerHTML = data['cpu_count'];
+                document.querySelector('#disk_count').innerHTML = data['disk_count'];
+                document.querySelector('#cpu_percent').innerHTML = data['cpu_percent'];
+                cpuPlot = document.getElementById('cpu');
+                // Plotly.update(cpuPlot, {values: [data['cpu_percent'], 100 - data['cpu_percent']]});
+                // var cpu_percent = {{ cpu_percent }};
+                
+                // Plotly.update(cpuPlot, 
+                //                 {
+                //                     values: [cpu_percent, 100 - cpu_percent],
+                //                     labels: ['Использовано', 'Свободно'],
+                //                     type: 'pie'
+                //                 });
+                // Plotly.update('cpu', [70, 100])
+
+                let disk_data2 = {
+                        "values": [[data['cpu_percent'], 100 - data['cpu_percent']]],
+                        "labels": [['Свободно', 'Занято']],
+                        "type": ['pie']
+                    };
+                Plotly.update('cpu', {
+                    "values": [[data['cpu_percent'], 100 - data['cpu_percent']]],
+                    "labels": [['Свободно', 'Занято']],
+                    "type": ['pie']
+                })
+                    // console.log("DATA: ", [data['cpu_percent'], 100 - data['cpu_percent']])
+                    // console.log("DATA2: ", [10, 100-40])
+            
+                document.querySelector('#mem_percent').innerHTML = data['mem_percent'];
+                document.querySelector('#mem_used').innerHTML = data['mem_used'].toFixed(2);
+                document.querySelector('#disk_free').innerHTML = data['disk_free'].toFixed(2);
+                document.querySelector('#disk_total').innerHTML = data['disk_total'].toFixed(2);
+
+                memPlot = document.getElementById('mem');
+                Plotly.update(memPlot, {values: [data.mem_used, data.mem_total - data.mem_used]});
+
+
+                diskPlot = document.getElementById('disks');
+                Plotly.update(diskPlot, {values: [data.disk_free, data.disk_total - data.disk_free]});
+            })
+            .catch(err => console.error(err));
+    }
+
+    setInterval(updateSystemInfo, 1000);
+</script>
+
+    <ul>
+        <li id="cpu_percent"></li>
+        <li id="disk_free"></li>
+        <li id="disk_count"></li>
+        <li id="disk_count"></li>
+        <li id="disk_count"></li>
+        <li>Количество процессоров: {{ cpu_count }}</li>
+        <li>Загруженность оперативной памяти: {{ mem_percent }}%</li>
+        <li>Количество жестких дисков: {{ disk_count }}</li>
+        <li>Использовано дискового пространства: {{ disk_free }} GB</li>
+        <li>Свободно дискового пространства: {{ disk_total - disk_free }} GB</li>
+        <br>
+        <li>Количество процессоров: <span id="cpu_count"></span></li>
+        <li>Загруженность оперативной памяти: <span id="mem_percent"></span>%</li>
+        <li>Количество жестких дисков: <span id="disk_count"></span></li>
+        <li>Использовано дискового пространства: <span id="disk_free"></span> GB</li>
+        <li>Свободно дискового пространства: <span id="disk_total"></span> GB</li>
+    </ul>
+
+{% endblock %}

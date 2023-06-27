@@ -1,5 +1,7 @@
 import json
 from flask import jsonify, render_template, request
+from config import configStart
+from commands import *
 
 def get_items():
     try:
@@ -15,7 +17,9 @@ def save_items(items):
 
 def start():
     items = get_items()
-
+    data = {}
+    data["ip_all"] = ip_all()
+    data["port"] = configStart["port"]
     if request.method == 'POST':
         # Получаем данные из формы и добавляем новый элемент в список
         name = request.form['name']
@@ -30,4 +34,4 @@ def start():
     
     else:
         # Отображаем страницу с формой добавления элемента и списком всех элементов
-        return render_template('default.html', items=items)
+        return render_template('default.html', items=items, data=data)

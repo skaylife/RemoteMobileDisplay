@@ -1,7 +1,17 @@
 {% extends "base.html"%}
 
 {% block content %}
+    <br>
     <h1>Index</h1>
+    {% if data %}
+    <h5>Чтоб подключиться с телефона впишите Сетевые данные</h5>
+    <p>Локальный IP в сети: <a href="http://{{ data['ip_all']['ip_local'] }}:{{data['port']}}">{{ data['ip_all']['ip_local'] }}:{{data['port']}}</a> | <a href="http://127.0.0.1:5000/">127.0.0.1:5000</a></p>
+    {% endif %}
+
+
+            
+
+
     <p>Выберите функцию:</p>
 	<ul>
 	    <li><a href="{{ url_for('execute_func', url='youtube.com') }}">YouTube</a></li>
