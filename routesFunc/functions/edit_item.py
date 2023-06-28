@@ -1,8 +1,6 @@
 from flask import Flask, render_template, url_for, redirect, request, jsonify
 import json
 from .crud_json import *
-filename = 'data.json'
-
 
 
 def edit_item(index):

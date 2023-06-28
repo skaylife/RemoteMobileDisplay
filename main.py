@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 from commands import *
 import json
 import psutil
@@ -37,36 +37,6 @@ def edit_elem(index):
 @app.route('/delete/<int:index>', methods=['POST'])
 def delete_elem(index):
     return delete_item(index)
-
-
-@app.route('/move_up/<int:index>', methods=['POST'])
-def move_up(index):
-    # Перемещаем элемент вверх по списку
-    if index > 0:
-        items[index], items[index - 1] = items[index - 1], items[index]
-
-        # Сохраняем список в файле JSON
-        with open(filename, 'w') as f:
-            f.write(json.dumps(items))
-
-    # Возвращаем JSON-ответ с обновленным списком
-    return jsonify(items)
-
-
-@app.route('/move_down/<int:index>', methods=['POST'])
-def move_down(index):
-    # Перемещаем элемент вниз по списку
-    if index < len(items) - 1:
-        items[index], items[index + 1] = items[index + 1], items[index]
-
-        # Сохраняем список в файле JSON
-        with open(filename, 'w') as f:
-            f.write(json.dumps(items))
-
-    # Возвращаем JSON-ответ с обновленным списком
-    return jsonify(items)
-
-
 
 
     # Обработчик запроса на выполнение функции по ключу
@@ -138,6 +108,41 @@ def system_info():
                    disk_count=len(psutil.disk_partitions()),
                    disk_free=disk_free,
                    disk_total=disk_total)
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings_elem():
+    return settings()
+
+@app.route('/move/<string:position>/<int:index>', methods=['POST'])
+
+def show_page(position, index):
+    if position == 'up':
+        # Перемещаем элемент вверх по списку
+        if index > 0:
+            items[index], items[index - 1] = items[index - 1], items[index]
+
+            # Сохраняем список в файле JSON
+            with open(filename, 'w') as f:
+                f.write(json.dumps(items))
+
+        return redirect('/settings')
+        # Возвращаем JSON-ответ с обновленным списком
+        return jsonify(items)
+    elif position == 'down':
+        # Перемещаем элемент вниз по списку
+        if index < len(items) - 1:
+            items[index], items[index + 1] = items[index + 1], items[index]
+
+            # Сохраняем список в файле JSON
+            with open(filename, 'w') as f:
+                f.write(json.dumps(items))
+
+        return redirect('/settings')
+        # Возвращаем JSON-ответ с обновленным списком
+        return jsonify(items)
+    else:
+        return 'Не работает смена позиции ссылок'
+
 
 if __name__ == '__main__':
     app.run(configStart["host"], configStart["port"])

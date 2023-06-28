@@ -19,6 +19,15 @@
 	    <li><a href="{{ url_for('execute_func', url='web.telegram.org') }}">Telegram</a></li>
 	</ul>
 
+    
+    <h4>Динамические ссылки</h4>
+    <ul>
+        {% for item in items %}
+	    <li><a target="_blank" href="{{ item['url'] }}">{{ item['name'] }}</a></li>
+        {% endfor %}
+	</ul>
+
+
 
     <h1>Settings</h1>
         <form method="POST">
@@ -31,24 +40,29 @@
         <ul>
         {% for item in items %}
         <li>
+
         <form method="POST" action="/edit/{{ loop.index0 }}">
             <input type="text" name="name" value="{{ item['name'] }}">
             <input type="text" name="url" value="{{ item['url'] }}">
             <button type="submit">Save</button>
         </form>
+
         <form method="POST" action="/delete/{{ loop.index0 }}">
             <button type="submit">Delete</button>
         </form>
+
         {% if loop.index > 1 %}
-        <form method="POST" action="/move_up/{{ loop.index0 }}">
-        <button type="submit">Up</button>
+        <form method="POST" action="/move/up/{{ loop.index0 }}">
+            <button type="submit">Up</button>
         </form>
         {% endif %}
+
         {% if loop.index < items|length %}
-        <form method="POST" action="/move_down/{{ loop.index0 }}">
-        <button type="submit">Down</button>
+        <form method="POST" action="/move/down/{{ loop.index0 }}">
+            <button type="submit">Down</button>
         </form>
         {% endif %}
+
         </li>
         {% endfor %}
         </ul>
