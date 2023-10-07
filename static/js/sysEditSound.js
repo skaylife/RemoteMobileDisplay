@@ -40,4 +40,3 @@ function updateTextInput(value) {
     xhr.send("sounds_position=" + value);
 }
 
-console.log("================================")

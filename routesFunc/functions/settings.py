@@ -1,5 +1,6 @@
 import json
 from flask import jsonify, render_template, redirect, request
+import re
 from config import configStart
 from commands import *
 
@@ -15,8 +16,12 @@ def settings():
         url = request.form['url']
         
         # Проверка наличие совпадения по url
-        if not url.startswith("https://") and not url.startswith("http://"):
-            url = "https://" + url
+        # if not url.startswith("https://") and not url.startswith("http://"):
+        #     url = "https://" + url
+
+        url = re.sub(r'https://', '', url)
+        # Удаляем "http://"
+        url = re.sub(r'http://', '', url)
         
         # Перебор циклом сопадений с url который ввел пользователь
         for item in items:
@@ -29,8 +34,8 @@ def settings():
         # for item in items:
         #     if item['name'] == name:
         #         return f"Найдено совпадение название: '{name}' url: '{item['url']}'"
-        lambda id_elem: id_elem +1
-        items.append({'id': id_elem(),'name': name, 'url': url})
+        # lambda id_elem: id_elem +1
+        items.append({'name': name, 'url': url})
         
         # Сохраняем список в файле JSON
         save_items(items)

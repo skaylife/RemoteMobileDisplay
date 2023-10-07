@@ -41,7 +41,7 @@ def delete_elem(index):
 
 
     # Обработчик запроса на выполнение функции по ключу
-@app.route('/execute/<url>')
+@app.route('/execute/<path:url>')
 def execute_func(url):
     # Извлекаем нужную функцию из словаря funcs
     
@@ -158,7 +158,7 @@ def sys_sounds():
         # set_system_volume(sys_sounds_position)
         # result = str(float(position) * 2)
         # result = positionHtml
-        
+        redirect("/")
         return positionHtml
     except Exception as e:
         return str(e), 400
@@ -182,7 +182,6 @@ def sys_sounds():
 
 if __name__ == '__main__':
     app.run(configStart["host"], configStart["port"])
-    set_system_volume(new_volume=0.05)
         # Загружаем список элементов из файла JSON
 
 

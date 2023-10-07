@@ -1,5 +1,6 @@
 import json
 from flask import jsonify, render_template, redirect, request
+import re
 from config import configStart
 from commands import *
 
@@ -16,8 +17,12 @@ def start():
         name = request.form['name']
         url = request.form['url']
         # Проверка на наличие https:// и http://
-        if not url.startswith("https://") and not url.startswith("http://"):
-            url = "https://" + url
+        # if not url.startswith("https://") and not url.startswith("http://"):
+        #     url = "https://" + url
+
+        url = re.sub(r'https://', '', url)
+        # Удаляем "http://"
+        url = re.sub(r'http://', '', url)
 
         items.append({'name': name, 'url': url})
         
