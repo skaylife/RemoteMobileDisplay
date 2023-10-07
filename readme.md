@@ -2,7 +2,7 @@
 
 ## Запуск приложения 
 
-Запуск проекта без venv при первом запуске `Windows`
+Запуск проекта без venv при первом старте на `Windows`
 
 `pip install -r requirements.txt`
 

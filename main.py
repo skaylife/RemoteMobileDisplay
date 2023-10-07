@@ -6,6 +6,7 @@ import plotly.graph_objs as go
 
 from config import configStart
 from commandsFunc.workTimePc import workTimePc
+from commandsFunc.sysEditSound import set_system_volume
 
 from routesFunc.allFunctions import *
 
@@ -148,14 +149,40 @@ def show_page(position, index):
 
 @app.route('/sys_sounds', methods=['POST'])
 def sys_sounds():
-    position = data('sounds_position')
-    print(position)
-    return "Не воркает звук"
+    try:
+        positionHtml = request.form['sounds_position']
+        sys_sounds_position = int(positionHtml) / 100
+        print(sys_sounds_position)
+        set_system_volume(new_volume=sys_sounds_position)
+        # set_system_volume(new_volume=0.01)
+        # set_system_volume(sys_sounds_position)
+        # result = str(float(position) * 2)
+        # result = positionHtml
+        
+        return positionHtml
+    except Exception as e:
+        return str(e), 400
+
+
+
+# @app.route('/update', methods=['POST'])
+# def update():
+#     try:
+#         user_input = request.form['user_input']  # Получаем значение из ползунка
+
+#         # Выполните здесь необходимую обработку с user_input
+#         # Например, преобразуем значение в число и умножим на 2:
+#         result = str(float(user_input) * 2)
+
+#         return result
+#     except Exception as e:
+#         return str(e), 400  # Отправляем ошибку 400 Bad Request
 
 
 
 if __name__ == '__main__':
     app.run(configStart["host"], configStart["port"])
+    set_system_volume(new_volume=0.05)
         # Загружаем список элементов из файла JSON
 
 
