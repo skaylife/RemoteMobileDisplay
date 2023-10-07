@@ -44,13 +44,16 @@ def delete_elem(index):
 def execute_func(url):
     # Извлекаем нужную функцию из словаря funcs
     
-    func = link_tab(url)
-    if func:
+
+    if url:
         # Выполняем функцию и возвращаем результат
-        return func()
+        func = link_tab(url)
+        # func()
+        return redirect('/')
     else:
         # Если ключ не найден, возвращаем 404 ошибку
         return render_template("default.html"), 404
+
 
 @app.route('/main')
 def main():
@@ -84,11 +87,11 @@ def diagrams():
                            cpu_percent=cpu_percent,
                            cpu_count=cpu_count,
                            mem_percent=mem_percent,
-                           mem_total=mem.total / 1024 / 1024,
-                           mem_used=mem.used / 1024 / 1024,
+                           mem_total=round(mem.total / 1024 / 1024, 2),
+                           mem_used=round(mem.used / 1024 / 1024, 2),
                            disk_count=len(psutil.disk_partitions()),
-                           disk_free=disk_free,
-                           disk_total=disk_total)
+                           disk_free=round(disk_free, 2),
+                           disk_total=round(disk_total, 2))
 
 @app.route("/system_info")
 def system_info():
@@ -104,7 +107,7 @@ def system_info():
                    cpu_count=cpu_count,
                    mem_percent=mem_percent,
                    mem_total=mem.total / 1024 / 1024,
-                   mem_used=mem.used / 1024 / 1024,
+                   mem_used=round(mem.used / 1024 / 1024, 2),
                    disk_count=len(psutil.disk_partitions()),
                    disk_free=disk_free,
                    disk_total=disk_total)
@@ -142,6 +145,13 @@ def show_page(position, index):
         return jsonify(items)
     else:
         return 'Не работает смена позиции ссылок'
+
+@app.route('/sys_sounds', methods=['POST'])
+def sys_sounds():
+    position = data('sounds_position')
+    print(position)
+    return "Не воркает звук"
+
 
 
 if __name__ == '__main__':

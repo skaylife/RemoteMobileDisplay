@@ -168,7 +168,7 @@
 # Sound.volume_down() # уменьшим громкость на 2 единицы
 
 
-import requests
+# import requests
 
 # # Отправляем GET-запрос к сайту, который покажет нам наш IP-адрес
 # response = requests.get('https://api.ipify.org')
@@ -338,9 +338,58 @@ import requests
 
 # ===================================================
 
-from testModule.allModules import *
+# from testModule.allModules import *
 
-oneModuleFunc()
-twoModuleFunc()
-print("*******************")
-testFunc()
+# oneModuleFunc()
+# twoModuleFunc()
+# print("*******************")
+# testFunc()
+
+# ===================================================
+
+# from ctypes import cast, POINTER
+# from comtypes import CLSCTX_ALL
+# from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+# def change_system_volume(increase=True, step=0.02):
+#     devices = AudioUtilities.GetSpeakers()
+#     interface = devices.Activate(
+#         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+#     volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+#     current_volume = volume.GetMasterVolumeLevelScalar()
+#     if increase:
+#         new_volume = min(1.0, current_volume + step)
+#     else:
+#         new_volume = max(0.0, current_volume - step)
+
+#     volume.SetMasterVolumeLevelScalar(new_volume, None)
+
+# if __name__ == "__main__":
+#     # Увеличиваем громкость на 10%
+#     change_system_volume(increase=True, step=0.05)
+#     print("Change system volume")
+#     # Уменьшаем громкость на 10%
+#     # change_system_volume(increase=False, step=0.10)
+
+# ===================================================
+
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+def set_system_volume(new_volume):
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(
+        IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+    # Убедимся, что новая громкость находится в диапазоне [0.0, 1.0]
+    new_volume = max(0.0, min(1.0, new_volume))
+
+    volume.SetMasterVolumeLevelScalar(new_volume, None)
+
+if __name__ == "__main__":
+    # Устанавливаем громкость на 100% (1.0)
+    set_system_volume(new_volume=0.05)
+    print("Change system volume")

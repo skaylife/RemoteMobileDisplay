@@ -8,9 +8,16 @@
     <p>Локальный IP в сети: <a href="http://{{ data['ip_all']['ip_local'] }}:{{data['port']}}">{{ data['ip_all']['ip_local'] }}:{{data['port']}}</a> | <a href="http://127.0.0.1:5000/">127.0.0.1:5000</a></p>
     {% endif %}
 
+    <script src="{{ url_for('static', filename='js/sysEditSound.js') }}"></script>
 
-            
+    <h4>Изменение звука системы</h4>
 
+    <form>
+        <!-- <input type="text" name="sounds_position"> -->
+        <input type="range" id="sounds_position" name="sounds_position" min="0" max="100" step="1" value="50" oninput="updateTextInput(this.value);">
+        <input type="text" id="textInput" value="50" readonly>
+        <input type="submit" value="Отправить">
+    </form>
 
     <p>Выберите функцию:</p>
 	<ul>
@@ -24,6 +31,7 @@
     <ul>
         {% for item in items %}
 	    <li><a target="_blank" href="{{ item['url'] }}">{{ item['name'] }}</a></li>
+        <!-- <li><a target="_blank" href="{{ url_for('execute_func', url=item['url']) }}">** {{ item['name'] }}</a></li> -->
         {% endfor %}
 	</ul>
 
@@ -66,4 +74,11 @@
         </li>
         {% endfor %}
         </ul>
+
+
+        <!-- <script>
+            function updateTextInput(val) {
+                document.getElementById('textInput').value = val;
+            }
+        </script> -->
 {% endblock %}

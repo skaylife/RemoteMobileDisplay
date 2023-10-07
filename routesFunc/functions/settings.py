@@ -22,13 +22,15 @@ def settings():
         for item in items:
             if item['url'] == url:
                 return f"Найдено совпадение название: '{url}' для элемента '{item['name']}'"
-
-        # Перебор циклом сопадений с name который ввел пользователь
-        for item in items:
             if item['name'] == name:
-                return f"Найдено совпадение название: '{name}' url: '{item['url']}'"
+                    return f"Найдено совпадение название: '{name}' url: '{item['url']}'"
 
-        items.append({'name': name, 'url': url})
+        # # Перебор циклом сопадений с name который ввел пользователь
+        # for item in items:
+        #     if item['name'] == name:
+        #         return f"Найдено совпадение название: '{name}' url: '{item['url']}'"
+        lambda id_elem: id_elem +1
+        items.append({'id': id_elem(),'name': name, 'url': url})
         
         # Сохраняем список в файле JSON
         save_items(items)

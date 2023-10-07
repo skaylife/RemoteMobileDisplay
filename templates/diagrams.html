@@ -3,6 +3,18 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <h1>Информация о системе</h1>
+
+    <ul>
+        <li>Количество процессоров: <span id="cpu_count"></span></li>
+        <li>Загруженность процессора: <span id="cpu_percent"></span> %</li>
+        <li>Загруженность оперативной памяти: <span id="mem_percent"></span> %</li>
+        <li>Количество оперативной памяти: {{ mem_total }} GB</li>
+        <li>Использовано оперативной памяти <span id="mem_used"></span> GB</li>
+        <li>Количество жестких дисков: <span id="disk_count"></span></li>
+        <li>Использовано дискового пространства: {{ disk_free }} GB</li>
+        <li>Свободно дискового пространства: {{ disk_total - disk_free }} GB</li>
+    </ul>
+
     <div id="cpu" style="display:inline-block;width:33%;"></div>
     <div id="cpu2" style="display:inline-block;width:33%;"></div>
     <div id="mem" style="display:inline-block;width:33%;"></div>
@@ -52,6 +64,8 @@
                 document.querySelector('#cpu_count').innerHTML = data['cpu_count'];
                 document.querySelector('#disk_count').innerHTML = data['disk_count'];
                 document.querySelector('#cpu_percent').innerHTML = data['cpu_percent'];
+                document.querySelector('#mem_used').innerHTML = data['mem_used'];
+                // console.log(data['mem_used']);
                 cpuPlot = document.getElementById('cpu');
                 // Plotly.update(cpuPlot, {values: [data['cpu_percent'], 100 - data['cpu_percent']]});
                 // var cpu_percent = {{ cpu_percent }};
@@ -78,9 +92,9 @@
                     // console.log("DATA2: ", [10, 100-40])
             
                 document.querySelector('#mem_percent').innerHTML = data['mem_percent'];
-                document.querySelector('#mem_used').innerHTML = data['mem_used'].toFixed(2);
+                // document.querySelector('#mem_used').innerHTML = data['mem_used'].toFixed(2);
                 document.querySelector('#disk_free').innerHTML = data['disk_free'].toFixed(2);
-                document.querySelector('#disk_total').innerHTML = data['disk_total'].toFixed(2);
+                // document.querySelector('#disk_total').innerHTML = data['disk_total'].toFixed(2);
 
                 memPlot = document.getElementById('mem');
                 Plotly.update(memPlot, {values: [data.mem_used, data.mem_total - data.mem_used]});
@@ -95,23 +109,6 @@
     setInterval(updateSystemInfo, 1000);
 </script>
 
-    <ul>
-        <li id="cpu_percent"></li>
-        <li id="disk_free"></li>
-        <li id="disk_count"></li>
-        <li id="disk_count"></li>
-        <li id="disk_count"></li>
-        <li>Количество процессоров: {{ cpu_count }}</li>
-        <li>Загруженность оперативной памяти: {{ mem_percent }}%</li>
-        <li>Количество жестких дисков: {{ disk_count }}</li>
-        <li>Использовано дискового пространства: {{ disk_free }} GB</li>
-        <li>Свободно дискового пространства: {{ disk_total - disk_free }} GB</li>
-        <br>
-        <li>Количество процессоров: <span id="cpu_count"></span></li>
-        <li>Загруженность оперативной памяти: <span id="mem_percent"></span>%</li>
-        <li>Количество жестких дисков: <span id="disk_count"></span></li>
-        <li>Использовано дискового пространства: <span id="disk_free"></span> GB</li>
-        <li>Свободно дискового пространства: <span id="disk_total"></span> GB</li>
-    </ul>
+
 
 {% endblock %}
