@@ -374,22 +374,37 @@
 
 # ===================================================
 
-from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+# import comtypes
+# from ctypes import cast, POINTER
+# from comtypes import CLSCTX_ALL
+# from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-def set_system_volume(new_volume):
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(
-        IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
+# def set_system_volume(new_volume):
+#     comtypes.CoInitialize()  # Инициализируем COM-подсистему
 
-    # Убедимся, что новая громкость находится в диапазоне [0.0, 1.0]
-    new_volume = max(0.0, min(1.0, new_volume))
+#     devices = AudioUtilities.GetSpeakers()
+#     interface = devices.Activate(
+#         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+#     volume = cast(interface, POINTER(IAudioEndpointVolume))
 
-    volume.SetMasterVolumeLevelScalar(new_volume, None)
+#     # Убедимся, что новая громкость находится в диапазоне [0.0, 1.0]
+#     new_volume = max(0.0, min(1.0, new_volume))
 
-if __name__ == "__main__":
-    # Устанавливаем громкость на 100% (1.0)
-    set_system_volume(new_volume=0.05)
-    print("Change system volume")
+#     volume.SetMasterVolumeLevelScalar(new_volume, None)
+
+#     comtypes.CoUninitialize()  # Завершаем работу с COM-подсистемой
+
+# ===================================================
+
+import time
+import ctypes
+
+# Этот код выключает монитор
+ctypes.windll.user32.SendMessageW(0xFFFF, 0x112, 0xF170, 2)
+
+# Подождать некоторое время (например, 2 секунды)
+time.sleep(5)
+
+ctypes.windll.user32.SendMessageW(0xFFFF, 0x112, 0xF170, -1)
+
+# ===================================================

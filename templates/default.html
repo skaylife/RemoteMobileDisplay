@@ -19,6 +19,17 @@
         <p>Громкость: <span id="positionHtml"></span>%</p>
     </form>
 
+    <h4>Монитор</h4>
+
+
+        <form method="POST" action="/monitor/off">
+            <button type="submit" id="monitor_off">Выключить Монитор</button>
+        </form>
+
+        <form method="POST" action="/monitor/on">
+            <button type="submit" id="monitor_on">Включить Монитор</button>
+        </form>
+
     <p>Выберите функцию:</p>
 	<ul>
 	    <li><a href="{{ url_for('execute_func', url='youtube.com') }}">YouTube</a></li>

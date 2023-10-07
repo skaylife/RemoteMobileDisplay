@@ -7,6 +7,7 @@ import plotly.graph_objs as go
 from config import configStart
 from commandsFunc.workTimePc import workTimePc
 from commandsFunc.sysEditSound import set_system_volume
+from commandsFunc.monitor import OnPc, OffPc
 
 from routesFunc.allFunctions import *
 
@@ -152,7 +153,7 @@ def sys_sounds():
     try:
         positionHtml = request.form['sounds_position']
         sys_sounds_position = int(positionHtml) / 100
-        print(sys_sounds_position)
+        # print(sys_sounds_position)
         set_system_volume(new_volume=sys_sounds_position)
         # set_system_volume(new_volume=0.01)
         # set_system_volume(sys_sounds_position)
@@ -163,8 +164,18 @@ def sys_sounds():
     except Exception as e:
         return str(e), 400
 
-
-
+@app.route('/monitor/<path:status>', methods=['POST'])
+def monitor(status):
+    try:
+        if status == "off":
+            OffPc()
+            return redirect('/')
+        else:
+            OnPc()
+            return redirect('/')
+    except Exception as e:
+        return str(e), 400
+    
 # @app.route('/update', methods=['POST'])
 # def update():
 #     try:
